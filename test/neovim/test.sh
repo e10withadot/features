@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This test file will be executed against one of the scenarios devcontainer.json test that
 # includes the 'color' feature with "greeting": "hello" option.
@@ -10,7 +10,7 @@ source dev-container-features-test-lib
 
 # Feature-specific tests
 # The 'check' command comes from the dev-container-features-test-lib.
-check "execute command" bash -c "hello | grep 'hello, $(whoami)!'"
+check "execute command" bash -c "nvim --version"
 
 # Report results
 # If any of the checks above exited with a non-zero exit code, the test will fail.
