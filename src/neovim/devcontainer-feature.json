@@ -1,6 +1,6 @@
 {
     "name": "Neovim (Binary)",
     "id": "neovim",
-    "version": "0.1",
+    "version": "0.1.0",
     "description": "Installs the latest stable Neovim binary.",
 }
