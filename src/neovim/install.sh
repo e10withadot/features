@@ -31,7 +31,10 @@ install_curl() {
 }
 
 remove_curl() {
-  if [ $curl_was_installed = true ]; then
+  if [ "$curl_was_installed" = true ]; then
+    return 0
+  fi
+  if ! command -v curl >/dev/null 2>&1; then
     return 0
   fi
 
@@ -75,14 +78,13 @@ if [ $TREESITTER = true ]; then \
   LATEST_URL=$(curl -Ls -o /dev/null -w '%{url_effective}' \
     https://github.com/tree-sitter/tree-sitter/releases/latest);
   TAG=${LATEST_URL##*/}
-  curl -L https://github.com/tree-sitter/tree-sitter/releases/download/$TAG/tree-sitter-linux-$TS_ARCH.gz 
+  curl -L https://github.com/tree-sitter/tree-sitter/releases/download/$TAG/tree-sitter-linux-$TS_ARCH.gz --output "tree-sitter-linux-$TS_ARCH.gz"
   gzip -d "tree-sitter-linux-$TS_ARCH.gz"
   mv "tree-sitter-linux-$TS_ARCH" tree-sitter
   if [ -f /usr/local/bin/tree-sitter ]; then
     rm -f /usr/local/bin/tree-sitter
   fi
-  cp -r tree-sitter /usr/local/bin
-  chmod +x /usr/local/bin/tree-sitter
+  install -m 0755 /usr/local/bin/tree-sitter
 fi
 remove_curl
 tar xzf nvim-linux-$ARCH.tar.gz
@@ -91,4 +93,4 @@ chmod +x /opt/nvim-linux-$ARCH/bin/nvim
 if [ -f /usr/local/bin/nvim ]; then
   rm -f /usr/local/bin/nvim
 fi
-ln -s /opt/nvim-linux-$ARCH/bin/nvim /usr/local/bin/
+ln -sf /opt/nvim-linux-$ARCH/bin/nvim /usr/local/bin/nvim
