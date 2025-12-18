@@ -85,7 +85,7 @@ if [ $TREESITTER = true ]; then \
   chmod +x /usr/local/bin/tree-sitter
 fi
 remove_curl
-tar xzvf nvim-linux-$ARCH.tar.gz
+tar xzf nvim-linux-$ARCH.tar.gz
 cp -r nvim-linux-$ARCH /opt
 chmod +x /opt/nvim-linux-$ARCH/bin/nvim
 if [ -f /usr/local/bin/nvim ]; then

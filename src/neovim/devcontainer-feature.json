@@ -13,7 +13,6 @@
         "treesitter": {
             "type": "boolean",
             "description": "If true, installs tree-sitter cli for use with nvim-treesitter.",
-            "proposals": [ true, false ],
             "default": false
         },
     },
