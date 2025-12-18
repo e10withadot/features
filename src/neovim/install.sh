@@ -74,7 +74,7 @@ aarch64|arm64)
 esac
 install_curl
 curl -L https://github.com/neovim/neovim/releases/download/$VERSION/nvim-linux-$ARCH.tar.gz --output nvim-linux-$ARCH.tar.gz
-if [ "$TREESITTER" = true ]; then \
+if [ "${TREESITTER:-false}" = true ]; then \
   LATEST_URL=$(curl -Ls -o /dev/null -w '%{url_effective}' \
     https://github.com/tree-sitter/tree-sitter/releases/latest);
   TAG=${LATEST_URL##*/}
@@ -84,7 +84,7 @@ if [ "$TREESITTER" = true ]; then \
   if [ -f /usr/local/bin/tree-sitter ]; then
     rm -f /usr/local/bin/tree-sitter
   fi
-  install -m 0755 /usr/local/bin/tree-sitter
+  install -m 0755 tree-sitter /usr/local/bin/tree-sitter
 fi
 remove_curl
 tar xzvf nvim-linux-$ARCH.tar.gz
