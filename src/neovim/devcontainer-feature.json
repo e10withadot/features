@@ -1,6 +1,20 @@
 {
     "name": "Neovim (Binary)",
     "id": "neovim",
-    "version": "0.1.0",
-    "description": "Installs the latest stable Neovim binary.",
+    "version": "0.2.0",
+    "description": "Installs the stable stable Neovim binary.",
+    "options": {
+        "version": {
+            "type": "string",
+            "description": "Neovim version to install (accepts any github release tag for Neovim).",
+            "proposals": [ "stable", "v0.11.5" ],
+            "default": "stable"
+        },
+        "treesitter": {
+            "type": "boolean",
+            "description": "If true, installs tree-sitter cli for use with nvim-treesitter.",
+            "proposals": [ true, false ],
+            "default": false
+        },
+    },
 }

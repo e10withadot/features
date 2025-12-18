@@ -1,5 +1,5 @@
-#1/bin/sh
-set -e
+#!/bin/sh
+set -eu
 
 curl_was_installed=false
 
@@ -31,7 +31,7 @@ install_curl() {
 }
 
 remove_curl() {
-  if [ $curl_was_installed ] || [ ! command -v curl >/dev/null 2>&1 ] ; then
+  if [ $curl_was_installed = true ]; then
     return 0
   fi
 
@@ -55,11 +55,35 @@ remove_curl() {
 }
 
 ARCH=$(uname -m)
-if [ "$ARCH" = "aarch64" ]; then \
-    ARCH=arm64; \
-fi
+TS_ARCH=""
+case "$ARCH" in x86_64|amd64)
+    ARCH=x86_64
+    TS_ARCH=x64
+    ;;
+aarch64|arm64)
+    ARCH=arm64
+    TS_ARCH=arm64
+    ;;
+  *)
+    echo "Unsupported architecture: $ARCH"
+    exit 1
+    ;;
+esac
 install_curl
-curl -L https://github.com/neovim/neovim/releases/download/stable/nvim-linux-$ARCH.tar.gz --output nvim-linux-$ARCH.tar.gz
+curl -L https://github.com/neovim/neovim/releases/download/$VERSION/nvim-linux-$ARCH.tar.gz --output nvim-linux-$ARCH.tar.gz
+if [ $TREESITTER = true ]; then \
+  LATEST_URL=$(curl -Ls -o /dev/null -w '%{url_effective}' \
+    https://github.com/tree-sitter/tree-sitter/releases/latest);
+  TAG=${LATEST_URL##*/}
+  curl -L https://github.com/tree-sitter/tree-sitter/releases/download/$TAG/tree-sitter-linux-$TS_ARCH.gz 
+  gzip -d "tree-sitter-linux-$TS_ARCH.gz"
+  mv "tree-sitter-linux-$TS_ARCH" tree-sitter
+  if [ -f /usr/local/bin/tree-sitter ]; then
+    rm -f /usr/local/bin/tree-sitter
+  fi
+  cp -r tree-sitter /usr/local/bin
+  chmod +x /usr/local/bin/tree-sitter
+fi
 remove_curl
 tar xzvf nvim-linux-$ARCH.tar.gz
 cp -r nvim-linux-$ARCH /opt
