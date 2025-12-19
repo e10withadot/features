@@ -19,25 +19,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug GHCR auth/headers
-        run: |
-          set -e
-          echo "===== /v2/ ====="
-          curl -i https://ghcr.io/v2/ | head -n 20 || true
+      - name: Install devcontainer CLI
+        run: npm install -g @devcontainers/cli
 
-          echo
-          echo "===== repo HEAD ====="
-          curl -i https://ghcr.io/v2/e10withadot/features/manifests/test-tag | head -n 20 || true
-
-      - name: "Publish Features"
-        uses: devcontainers/action@v1
-        with:
-          publish-features: "true"
-          base-path-to-features: "./src"
-          generate-docs: "true"
-          
+      - name: Publish feature collection
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          devcontainer features publish \
+            -r ghcr.io \
+            -n e10withadot/features \
+            ./src
 
       - name: Create PR for Documentation
         id: push_image_info
