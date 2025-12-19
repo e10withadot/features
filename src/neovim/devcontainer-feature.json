@@ -14,6 +14,6 @@
             "type": "boolean",
             "description": "If true, installs tree-sitter cli for use with nvim-treesitter.",
             "default": false
-        },
-    },
+        }
+    }
 }
